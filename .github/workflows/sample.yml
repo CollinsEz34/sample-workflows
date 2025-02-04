@@ -1,16 +1,27 @@
-name: shell commands
+name: CI Pipeline
 on:
-  [push]
-      
+  push:
+    branches:
+      - main
 jobs:
-  run-shell-command:
-
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: string
-        run: echo "Welcome to Devops"
-      - name: multiline script
-        run:
-          node -v
-          npm -v
-  
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Tests
+        run: npm test
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t <collinskiprotich780>/current-time-api:${{ github.sha }} .
+          docker tag <collinskiprotich780>/current-time-api:${{ github.sha }} <Your-DockerHub-Username>/current-time-api:latest
+          docker push <collinskiprotich780>/current-time-api:${{ github.sha }}
+          docker push <collinskiprotich780>/current-time-api:latest
