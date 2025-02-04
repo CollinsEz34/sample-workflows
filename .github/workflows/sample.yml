@@ -25,7 +25,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t collinskiprotich780/current-time-api:${{ github.sha }} .
+          docker build -f docker/Dockerfile -t collinskiprotich780/current-time-api:${{ github.sha }} .
           docker tag collinskiprotich780/current-time-api:${{ github.sha }} collinskiprotich780/current-time-api:latest
           docker push collinskiprotich780/current-time-api:${{ github.sha }}
           docker push collinskiprotich780/current-time-api:latest
