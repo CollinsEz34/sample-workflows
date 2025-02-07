@@ -18,3 +18,10 @@ spec:
           image: collinskiprotich780/current-time-api:latest  # ✅ Ensure this is correct
           ports:
             - containerPort: 3000
+          resources:   # ✅ Add resource requests and limits
+            limits:
+              cpu: "500m"     # Max CPU usage (0.5 CPU core)
+              memory: "256Mi" # Max Memory usage (256 MB)
+            requests:
+              cpu: "250m"     # Guaranteed CPU (0.25 CPU core)
+              memory: "128Mi" # Guaranteed Memory (128 MB)
