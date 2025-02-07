@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: current-time-api
-  namespace: argocd
+  namespace: current-time-api  # ✅ Change this from "argocd" to your app namespace
 spec:
   replicas: 2
   selector:
