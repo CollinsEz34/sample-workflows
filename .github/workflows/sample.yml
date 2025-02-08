@@ -23,12 +23,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd Mywebsite
+          cd Mywebsite/portfolio
           npm install
 
       - name: Run Tests
         run: |
-          cd Mywebsite
+          cd Mywebsite/portfolio
           npm test
 
       - name: Log in to Docker Hub
@@ -39,8 +39,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          cd Mywebsite
-          docker build -f ../docker/Dockerfile -t collinskiprotich780/current-time-api:${{ github.sha }} .
+          cd Mywebsite/portfolio
+          docker build -f ../../docker/Dockerfile -t collinskiprotich780/current-time-api:${{ github.sha }} .
           docker tag collinskiprotich780/current-time-api:${{ github.sha }} collinskiprotich780/current-time-api:latest
           docker push collinskiprotich780/current-time-api:${{ github.sha }}
           docker push collinskiprotich780/current-time-api:latest
