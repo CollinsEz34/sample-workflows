@@ -7,24 +7,36 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest  # Or any other runner you want to use
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Removed the 'Set up Node.js' step since you already have Node.js and npm on the machine
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          cd Mywebsite/portfolio
+          npm install
 
       - name: Run Tests
-        run: npm test
+        run: |
+          cd Mywebsite/portfolio
+          npm test
 
       - name: Log in to Docker Hub
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
       - name: Build and Push Docker Image
         run: |
+          cd Mywebsite/portfolio
           docker build -f docker/Dockerfile -t collinskiprotich780/current-time-api:${{ github.sha }} .
           docker tag collinskiprotich780/current-time-api:${{ github.sha }} collinskiprotich780/current-time-api:latest
           docker push collinskiprotich780/current-time-api:${{ github.sha }}
